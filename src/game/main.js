@@ -8,15 +8,15 @@ import Phaser from "phaser";
 const config = {
     title: "PLATFORM_PUZZLE",
     type: Phaser.AUTO,
-    width: 1024,
-    height: 768,
+    width: 640,
+    height: 480,
     parent: "game-container",
     backgroundColor: "#0x444444",
     scale: {
         mode: Phaser.Scale.FIT,
         autoCenter: Phaser.Scale.CENTER_BOTH,
     },
-    physic: {
+    physics: {
         default: "arcade",
         arcade: {
             gravity: { y: 300 },

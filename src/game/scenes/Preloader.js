@@ -7,15 +7,11 @@ export class Preloader extends Scene {
 
     preload() {
         this.load.setPath("assets");
-        // this.load.image([
-        //     'bg',
-        //     'logo',
-        // ]);
 
         this.load.image('background', 'bg.png');
         this.load.image('logo', 'logo.png');
 
-        this.load.tilemapTiledJSON('level_1', 'mapDatas/level_1.json');
+        this.load.tilemapTiledJSON('level01', 'mapDatas/level01.json');
         this.load.image('tile', 'textures/tiles/default_tile.png');
 
         this.load.image('box', 'textures/character/box.png');
