@@ -5,7 +5,7 @@ import Phaser from "phaser";
 
 //  Find out more information about the Game Config at:
 //  https://newdocs.phaser.io/docs/3.70.0/Phaser.Types.Core.GameConfig
-const config = {
+const config: Phaser.Types.Core.GameConfig = {
     title: "PLATFORM_PUZZLE",
     type: Phaser.AUTO,
     width: 640,
@@ -19,14 +19,14 @@ const config = {
     physics: {
         default: "arcade",
         arcade: {
-            gravity: { y: 300 },
+            gravity: { x: 0, y: 300 },
             debug: true,
         },
     },
     scene: [Preloader, MainMenu, Game],
 };
 
-const StartGame = (parent) => {
+const StartGame = (parent: string) => {
     return new Phaser.Game({ ...config, parent });
 };
 

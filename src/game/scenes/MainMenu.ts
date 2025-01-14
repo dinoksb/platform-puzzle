@@ -9,7 +9,7 @@ export class MainMenu extends Scene {
     create() {
         const { centerX, centerY } = this.cameras.main;
 
-        this.add.image(0, 0, 'background').setOrigin(0, 0);
+        this.add.image(0, 0, "background").setOrigin(0, 0);
         this.add
             .text(centerX, centerY, "Platform Puzzle Game!", {
                 fontFamily: "Arial Black",

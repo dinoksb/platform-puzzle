@@ -1,7 +1,28 @@
 import Phaser from "phaser";
 
+interface PlayerConfig {
+    scene: Phaser.Scene;
+    x: number;
+    y: number;
+    settings: {
+        gravity: {
+            y: number;
+        };
+    };
+}
+
 export class Player extends Phaser.GameObjects.Sprite {
-    constructor(config) {
+    private playerMaxVelocityX: number;
+    private playerSpeed: number;
+    private playerJump: number;
+    private wallJumpSpeed: number;
+    private wallSlideSpeed: number;
+    private canJump: boolean;
+    private onWall: boolean;
+    private wallJumpDirection: number;
+    private cursor: Phaser.Types.Input.Keyboard.CursorKeys;
+
+    constructor(config: PlayerConfig) {
         super(config.scene, config.x, config.y, "box");
 
         this.scene = config.scene;
@@ -18,10 +39,16 @@ export class Player extends Phaser.GameObjects.Sprite {
         this.onWall = false;
         this.wallJumpDirection = 0;
 
-        this.body.setGravityY(config.settings.gravity.y);
-        this.body.setMaxVelocityX(this.playerMaxVelocityX);
+        const body = this.body as Phaser.Physics.Arcade.Body;
+        body.setGravityY(config.settings.gravity.y);
+        body.setMaxVelocityX(this.playerMaxVelocityX);
 
-        this.cursor = this.scene.input.keyboard.createCursorKeys();
+        const keyboard = this.scene.input.keyboard;
+        if (keyboard) {
+            this.cursor = keyboard.createCursorKeys();
+        } else {
+            throw new Error("Keyboard input is not initialized.");
+        }
     }
 
     update() {
@@ -29,17 +56,19 @@ export class Player extends Phaser.GameObjects.Sprite {
         this.handleJumpState();
     }
 
-    move() {
+    private move() {
+        const body = this.body as Phaser.Physics.Arcade.Body;
+
         // Handle left/right movement based on input
         if (this.cursor.left.isDown) {
-            this.body.setAccelerationX(-this.playerSpeed);
+            body.setAccelerationX(-this.playerSpeed);
             this.flipX = true;
         } else if (this.cursor.right.isDown) {
-            this.body.setAccelerationX(this.playerSpeed);
+            body.setAccelerationX(this.playerSpeed);
             this.flipX = false;
         } else if (!this.onWall) {
-            this.body.setAccelerationX(
-                ((this.body.velocity.x > 0 ? -1 : 1) * this.playerSpeed) / 3
+            body.setAccelerationX(
+                ((body.velocity.x > 0 ? -1 : 1) * this.playerSpeed) / 3
             );
         }
 
@@ -47,23 +76,23 @@ export class Player extends Phaser.GameObjects.Sprite {
         if (
             (this.cursor.left.isDown || this.cursor.right.isDown) &&
             this.onWall &&
-            this.body.velocity.y > this.wallSlideSpeed
+            body.velocity.y > this.wallSlideSpeed
         ) {
-            this.body.setVelocityY(this.wallSlideSpeed);
+            body.setVelocityY(this.wallSlideSpeed);
         }
     }
 
-    jump() {
+    private jump() {
+        const body = this.body as Phaser.Physics.Arcade.Body;
+
         // Perform a jump if conditions are met
-        if ((this.canJump && this.body.blocked.down) || this.onWall) {
-            this.body.velocity.y = -this.playerJump;
+        if ((this.canJump && body.blocked.down) || this.onWall) {
+            body.velocity.y = -this.playerJump;
 
             // If jumping from a wall, set horizontal velocity
             if (this.onWall) {
-                this.body.setVelocityX(
-                    this.wallJumpDirection * this.wallJumpSpeed
-                );
-                this.body.setVelocityY(-this.wallJumpSpeed);
+                body.setVelocityX(this.wallJumpDirection * this.wallJumpSpeed);
+                body.setVelocityY(-this.wallJumpSpeed);
             }
 
             this.canJump = false;
@@ -71,23 +100,25 @@ export class Player extends Phaser.GameObjects.Sprite {
         }
     }
 
-    handleJumpState() {
+    private handleJumpState() {
+        const body = this.body as Phaser.Physics.Arcade.Body;
+
         // Check if jump input is pressed
         if (Phaser.Input.Keyboard.JustDown(this.cursor.space)) {
             this.jump();
         }
 
         // Reset jump ability if player is on the ground
-        if (this.body.blocked.down) {
+        if (body.blocked.down) {
             this.canJump = true;
             this.onWall = false;
         }
 
         // Detect if player is on a wall
-        if (this.body.blocked.right && !this.body.blocked.down) {
+        if (body.blocked.right && !body.blocked.down) {
             this.onWall = true;
             this.wallJumpDirection = -1; // Jump direction is left when on the right wall
-        } else if (this.body.blocked.left && !this.body.blocked.down) {
+        } else if (body.blocked.left && !body.blocked.down) {
             this.onWall = true;
             this.wallJumpDirection = 1; // Jump direction is right when on the left wall
         } else {
