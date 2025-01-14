@@ -1,4 +1,4 @@
-import { Preloader } from "./scenes/Preloader"
+import { Preloader } from "./scenes/Preloader";
 import { MainMenu } from "./scenes/MainMenu";
 import { Game } from "./scenes/Game";
 import Phaser from "phaser";
