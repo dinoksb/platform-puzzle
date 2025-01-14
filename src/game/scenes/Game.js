@@ -21,10 +21,10 @@ export class Game extends Scene {
         const settings = {
             gravity: this.physics.world.gravity,
         };
-        this.box = new Player({
+        this.player = new Player({
             scene: this,
-            x: 200,
-            y: 440,
+            x: map.tileWidth * 2,
+            y: map.heightInPixels - map.tileWidth * 2,
             settings: settings,
         });
 
@@ -34,14 +34,14 @@ export class Game extends Scene {
             map.widthInPixels,
             map.heightInPixels
         );
-        this.cameras.main.startFollow(this.box);
-        this.physics.add.collider(this.box, layer);
+        this.cameras.main.startFollow(this.player);
+        this.physics.add.collider(this.player, layer);
 
         EventBus.emit("current-scene-ready", this);
     }
 
     update() {
-        this.box.update();
+        this.player.update();
     }
 
     changeScene() {
