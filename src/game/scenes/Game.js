@@ -8,21 +8,33 @@ export class Game extends Scene {
     }
 
     create() {
+        const map = this.make.tilemap({ key: "tilelayer" });
+        const tileset = map.addTilesetImage("default_tile", "tile");
 
-        this.add.image(0, 0, "background").setOrigin(0, 0);
+        const background = this.add.image(0, 0, "background").setOrigin(0, 0);
+        background.setDisplaySize(map.widthInPixels, map.heightInPixels);
 
-        const map = this.make.tilemap({ key: "level01" });
-        const tileset = map.addTilesetImage("tileset_level01", "tile");
-        const layer = map.createLayer("layer01", tileset, 0, 0);
+        const layer = map.createLayer("platforms", tileset, 0, 0);
+
         map.setCollision(1);
-
-        // layer.setCollisionByExclusion([], true);
 
         const settings = {
             gravity: this.physics.world.gravity,
         };
-        this.box = new Player({ scene: this, x: 200, y: 440, settings: settings });
+        this.box = new Player({
+            scene: this,
+            x: 200,
+            y: 440,
+            settings: settings,
+        });
 
+        this.cameras.main.setBounds(
+            0,
+            0,
+            map.widthInPixels,
+            map.heightInPixels
+        );
+        this.cameras.main.startFollow(this.box);
         this.physics.add.collider(this.box, layer);
 
         EventBus.emit("current-scene-ready", this);
