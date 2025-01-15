@@ -1,5 +1,6 @@
 import { Scene } from "phaser";
 import { EventBus } from "../EventBus";
+import { GameState } from "../global/GlobalState";
 
 export class LevelSelectScene extends Scene {
     private scrollingMap: Phaser.GameObjects.TileSprite;
@@ -71,10 +72,6 @@ export class LevelSelectScene extends Scene {
         const colHeight =
             this.thumbHeight * this.rows + this.spacing * (this.rows - 1);
         const topMargin = (this.scale.height - colHeight) / 2;
-
-        console.log("this.scale.width: ", this.scale.width);
-        console.log("rowLength: ", rowLength);
-        console.log("leftMargin: ", leftMargin);
 
         // Create thumbnails
         this.createThumbnails(leftMargin, topMargin);
@@ -212,6 +209,42 @@ export class LevelSelectScene extends Scene {
                 if (gameObject instanceof Phaser.GameObjects.TileSprite) {
                     const startPosition = gameObject.getData("startPosition");
                     const swipeDistance = startPosition - gameObject.x;
+
+                    if (swipeDistance == 0) {
+                        const pointer = this.input.activePointer;
+                        this.thumbContainers.forEach((container) => {
+                            const thumb = container.list.find(
+                                (child) =>
+                                    child instanceof Phaser.GameObjects.Image
+                            ) as Phaser.GameObjects.Image;
+
+                            const levelText = container.list.find(
+                                (child) =>
+                                    child instanceof Phaser.GameObjects.Text
+                            ) as Phaser.GameObjects.Text;
+
+                            if (
+                                thumb &&
+                                levelText &&
+                                thumb.texture.key === "levelthumb"
+                            ) {
+                                const boundingBox = thumb.getBounds();
+                                const level = parseInt(levelText.text, 10);
+                                if (
+                                    Phaser.Geom.Rectangle.Contains(
+                                        boundingBox,
+                                        pointer.x,
+                                        pointer.y
+                                    ) &&
+                                    level >= 0
+                                ) {
+                                    console.log("level: ", level);
+                                    GameState.currentLevel = level;
+                                    this.scene.start("GameScene", { level });
+                                }
+                            }
+                        });
+                    }
 
                     if (swipeDistance > this.scale.width / 8) {
                         this.changePage(1);

@@ -21,7 +21,6 @@ export class PreloaderScene extends Scene {
         this.load.image("transp", "textures/ui/transp.png");
 
         // game scene
-        this.load.tilemapTiledJSON("tilelayer", "mapDatas/level01.json");
         this.load.image("tile", "textures/tiles/default_tile.png");
         this.load.image("box", "textures/character/box.png");
 

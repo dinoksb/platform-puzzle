@@ -1,12 +1,19 @@
 import { Scene } from "phaser";
 import { EventBus } from "../EventBus";
 import { Player } from "../core/Player";
+import { GameState } from "../global/GlobalState";
 
 export class GameScene extends Scene {
     private player!: Player;
 
     constructor() {
         super("GameScene");
+    }
+
+    preload() {
+        console.log("gamescene preload");
+        this.cache.tilemap.remove("tilelayer")
+        this.load.tilemapTiledJSON("tilelayer", `assets/mapDatas/level${GameState.currentLevel}.json`);
     }
 
     create() {
