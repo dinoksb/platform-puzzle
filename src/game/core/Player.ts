@@ -67,9 +67,8 @@ export class Player extends Phaser.GameObjects.Sprite {
             body.setAccelerationX(this.playerSpeed);
             this.flipX = false;
         } else if (!this.onWall) {
-            body.setAccelerationX(
-                ((body.velocity.x > 0 ? -1 : 1) * this.playerSpeed) / 3
-            );
+            body.setAccelerationX(0);
+            body.setDragX(this.playerSpeed / 2);
         }
 
         // Control sliding speed when the player is on a wall
