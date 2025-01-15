@@ -2,11 +2,11 @@ import { Scene } from "phaser";
 import { EventBus } from "../EventBus";
 import { Player } from "../core/Player";
 
-export class Game extends Scene {
+export class GameScene extends Scene {
     private player!: Player;
 
     constructor() {
-        super("Game");
+        super("GameScene");
     }
 
     create() {
@@ -54,6 +54,6 @@ export class Game extends Scene {
     }
 
     changeScene() {
-        this.scene.start("MainMenu");
+        this.scene.start("MainMenuScene");
     }
 }

@@ -1,6 +1,7 @@
-import { Preloader } from "./scenes/Preloader";
-import { MainMenu } from "./scenes/MainMenu";
-import { Game } from "./scenes/Game";
+import { PreloaderScene } from "./scenes/PreloaderScene";
+import { LevelSelectScene } from "./scenes/LevelSelectScene";
+import { MainMenuScene } from "./scenes/MainMenuScene";
+import { GameScene } from "./scenes/GameScene";
 import Phaser from "phaser";
 
 //  Find out more information about the Game Config at:
@@ -23,7 +24,7 @@ const config: Phaser.Types.Core.GameConfig = {
             debug: true,
         },
     },
-    scene: [Preloader, MainMenu, Game],
+    scene: [PreloaderScene, MainMenuScene, LevelSelectScene, GameScene],
 };
 
 const StartGame = (parent: string) => {

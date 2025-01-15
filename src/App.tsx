@@ -1,6 +1,6 @@
 import { useRef } from "react";
 import { IRefPhaserGame, PhaserGame } from "./game/PhaserGame";
-import { MainMenu } from "./game/scenes/MainMenu";
+import { MainMenuScene } from "./game/scenes/MainMenuScene";
 
 function App() {
     //  References to the PhaserGame component (game and scene are exposed)
@@ -8,7 +8,7 @@ function App() {
 
     const changeScene = () => {
         if (phaserRef.current) {
-            const scene = phaserRef.current.scene as MainMenu;
+            const scene = phaserRef.current.scene as MainMenuScene;
 
             if (scene) {
                 scene.changeScene();
