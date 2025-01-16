@@ -124,4 +124,25 @@ export class Player extends Phaser.GameObjects.Sprite {
             this.onWall = false;
         }
     }
+
+    canEatCoin(dot: Phaser.Physics.Arcade.Sprite) {
+        const playerPos = this.body?.position;
+        if (!playerPos) return false;
+
+        const body = dot.body as Phaser.Physics.Arcade.Body;
+        if (!body) return false;
+
+        const coinPos = body.position.clone();
+        coinPos.x -= body.offset.x;
+        coinPos.y -= body.offset.y;
+
+        console.log(
+            "test: ",
+            Phaser.Math.Distance.BetweenPointsSquared(playerPos, coinPos)
+        );
+
+        return (
+            Phaser.Math.Distance.BetweenPointsSquared(playerPos, coinPos) <= 100
+        );
+    }
 }
