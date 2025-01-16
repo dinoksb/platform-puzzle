@@ -22,8 +22,10 @@ export class Player extends Phaser.GameObjects.Sprite {
     private wallJumpDirection: number;
     private cursor: Phaser.Types.Input.Keyboard.CursorKeys;
 
+    public scene: Phaser.Scene;
+
     constructor(config: PlayerConfig) {
-        super(config.scene, config.x, config.y, "box");
+        super(config.scene, config.x, config.y, "player");
 
         this.scene = config.scene;
         this.scene.add.existing(this);
@@ -123,26 +125,5 @@ export class Player extends Phaser.GameObjects.Sprite {
         } else {
             this.onWall = false;
         }
-    }
-
-    canEatCoin(dot: Phaser.Physics.Arcade.Sprite) {
-        const playerPos = this.body?.position;
-        if (!playerPos) return false;
-
-        const body = dot.body as Phaser.Physics.Arcade.Body;
-        if (!body) return false;
-
-        const coinPos = body.position.clone();
-        coinPos.x -= body.offset.x;
-        coinPos.y -= body.offset.y;
-
-        console.log(
-            "test: ",
-            Phaser.Math.Distance.BetweenPointsSquared(playerPos, coinPos)
-        );
-
-        return (
-            Phaser.Math.Distance.BetweenPointsSquared(playerPos, coinPos) <= 100
-        );
     }
 }

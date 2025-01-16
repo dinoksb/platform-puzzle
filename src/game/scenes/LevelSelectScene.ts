@@ -238,7 +238,6 @@ export class LevelSelectScene extends Scene {
                                     ) &&
                                     level >= 0
                                 ) {
-                                    console.log("level: ", level);
                                     GameState.currentLevel = level;
                                     this.scene.start("GameScene", { level });
                                 }

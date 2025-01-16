@@ -1,7 +1,7 @@
 import { Scene } from "phaser";
 import { EventBus } from "../EventBus";
 import { Player } from "../core/Player";
-import { GameState } from "../global/GlobalState";
+// import { GameState } from "../global/GlobalState";
 
 export class GameScene extends Scene {
     private player!: Player;
@@ -17,7 +17,8 @@ export class GameScene extends Scene {
         this.cache.tilemap.remove("tilelayer");
         this.load.tilemapTiledJSON(
             "tilelayer",
-            `assets/mapDatas/level${GameState.currentLevel}.json`
+            // `assets/mapDatas/level${GameState.currentLevel}.json`
+            `assets/mapDatas/level0.json`
         );
     }
 
