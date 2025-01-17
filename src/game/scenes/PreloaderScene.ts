@@ -24,7 +24,7 @@ export class PreloaderScene extends Scene {
         this.load.image("tile", "textures/tiles/default_tile.png");
         this.load.image("goal", "textures/tiles/red_tile.png");
         this.load.image("coin", "textures/item/coin.png");
-        this.load.image("box", "textures/character/box.png");
+        this.load.image("player", "textures/character/box.png");
 
         // when load completed
         this.load.on("complete", () => {

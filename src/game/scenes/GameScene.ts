@@ -1,7 +1,8 @@
 import { Scene } from "phaser";
 import { EventBus } from "../EventBus";
 import { Player } from "../core/Player";
-// import { GameState } from "../global/GlobalState";
+import { KeyboardHorizontalMove } from "../core/components/input/keyboard/KeyboardHorizontalMove";
+import { KeyboardHorizontalSpaceWallJump } from "../core/components/input/keyboard/KeyboardHorizontalSpaceWallJump";
 
 export class GameScene extends Scene {
     private player!: Player;
@@ -93,28 +94,40 @@ export class GameScene extends Scene {
         this.scene.start("MainMenuScene");
     }
 
+    private createPlayer(posX: number, posY: number): void {
+        this.player = new Player({
+            scene: this,
+            x: posX,
+            y: posY,
+            texture: "player",
+            gravityX: 0,
+            gravityY: 200,
+        });
+
+        this.player.addComponent(
+            new KeyboardHorizontalMove(
+                800,
+                200,
+                true,
+                () => {
+                    this.player.flipX = true;
+                },
+                () => {
+                    this.player.flipX = false;
+                }
+            )
+        );
+        this.player.addComponent(new KeyboardHorizontalSpaceWallJump(300, 250));
+    }
+
     private createFromObjectsLayer(layer: Phaser.Tilemaps.ObjectLayer) {
         for (let i = 0; i < layer.objects.length; ++i) {
             const obj = layer.objects[i];
             switch (obj.name) {
                 case "spawn": {
-                    const settings = {
-                        gravity: this.physics.world.gravity,
-                    };
-
                     const x = Math.round(obj.x! / 32) * 32;
                     const y = Math.round(obj.y! / 32) * 32;
-
-                    this.player = new Player({
-                        scene: this,
-                        x,
-                        y,
-                        settings: settings,
-                    });
-                    this.player.setPosition(
-                        x + this.player.width,
-                        y + this.player.height
-                    );
+                    this.createPlayer(x, y);
                     break;
                 }
                 case "goal": {
